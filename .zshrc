@@ -125,3 +125,4 @@ function y() {
 }
 eval "$(zoxide init zsh)"
 alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
