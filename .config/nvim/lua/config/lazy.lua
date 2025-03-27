@@ -22,12 +22,6 @@ require("lazy").setup({
       "RRethy/base16-nvim"
     },
     {
-      "nvim-treesitter/nvim-treesitter-context",
-      config = function()
-        require("treesitter-context").setup()
-      end
-    },
-    {
       "ntpeters/vim-better-whitespace"
     },
     {
@@ -71,14 +65,58 @@ require("lazy").setup({
         require('leap').create_default_mappings()
       end
     },
-    { 'saadparwaiz1/cmp_luasnip' },
     {
-      'L3MON4D3/LuaSnip',
-      dependencies = { "rafamadriz/friendly-snippets" },
-      config = function ()
-        require("luasnip")
-        require("luasnip.loaders.from_vscode").lazy_load()
-      end
+      'saghen/blink.cmp',
+      -- optional: provides snippets for the snippet source
+      dependencies = { 'rafamadriz/friendly-snippets' },
+
+      -- use a release tag to download pre-built binaries
+      version = '1.*',
+      -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
+      -- build = 'cargo build --release',
+      -- If you use nix, you can build from source using latest nightly rust with:
+      -- build = 'nix run .#build-plugin',
+
+      ---@module 'blink.cmp'
+      ---@type blink.cmp.Config
+      opts = {
+        -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
+        -- 'super-tab' for mappings similar to vscode (tab to accept)
+        -- 'enter' for enter to accept
+        -- 'none' for no mappings
+        --
+        -- All presets have the following mappings:
+        -- C-space: Open menu or open docs if already open
+        -- C-n/C-p or Up/Down: Select next/previous item
+        -- C-e: Hide menu
+        -- C-k: Toggle signature help (if signature.enabled = true)
+        --
+        -- See :h blink-cmp-config-keymap for defining your own keymap
+        keymap = { preset = 'enter' },
+
+        appearance = {
+          -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+          -- Adjusts spacing to ensure icons are aligned
+          nerd_font_variant = 'mono'
+        },
+
+        -- (Default) Only show the documentation popup when manually triggered
+        completion = { documentation = { auto_show = false } },
+
+        -- Default list of enabled providers defined so that you can extend it
+        -- elsewhere in your config, without redefining it, due to `opts_extend`
+        sources = {
+          default = { 'lsp', 'path', 'snippets', 'buffer' },
+        },
+
+        -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
+        -- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
+        -- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
+        --
+        -- See the fuzzy documentation for more information
+        fuzzy = { implementation = "prefer_rust_with_warning" }
+      },
+      opts_extend = { "sources.default" }
     },
     {
       "kawre/leetcode.nvim",
@@ -125,8 +163,6 @@ require("lazy").setup({
     },
     {'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
     {'neovim/nvim-lspconfig'},
-    {'hrsh7th/cmp-nvim-lsp'},
-    {'hrsh7th/nvim-cmp'},
     {"pmizio/typescript-tools.nvim"},
     {
       "jiaoshijie/undotree",
@@ -258,7 +294,7 @@ end
 lsp_zero.extend_lspconfig({
   sign_text = true,
   lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+  capabilities = require('blink.cmp').get_lsp_capabilities(),
 })
 require('lspconfig').lua_ls.setup({
 })
@@ -267,41 +303,4 @@ require('lspconfig').clangd.setup({
 require('lspconfig').svelte.setup({
 })
 require("typescript-tools").setup({
-})
-local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
--- Add brackets after cmp function
-local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-cmp.event:on(
-  'confirm_done',
-  cmp_autopairs.on_confirm_done()
-)
-
-cmp.setup({
-  preselect = 'item',
-  sources = {
-    { name = "luasnip" },  -- Snippet source
-    { name = "nvim_lsp" }, -- LSP source for keywords
-    { name = "buffer" },   -- Buffer completion
-    { name = "path" },     -- Filepath completion
-  },
-  mapping = cmp.mapping.preset.insert({
-    -- `Enter` key to confirm completion
-    ['<CR>'] = cmp.mapping.confirm({select = true}),
-
-    -- Ctrl+Space to trigger completion menu
-    ['<C-Space>'] = cmp.mapping.complete(),
-
-    -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.vim_snippet_jump_forward(),
-    ['<C-b>'] = cmp_action.vim_snippet_jump_backward(),
-
-    -- Scroll up and down in the completion documentation
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),  }),
-  snippet = {
-    expand = function(args)
-      require'luasnip'.lsp_expand(args.body)
-    end,
-  },
 })
