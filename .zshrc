@@ -110,11 +110,11 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Setting default editor for ranger
-export VISUAL='nvim'   # Or replace 'vim' with your preferred text editor
-export EDITOR='nvim'   # Or replace 'vim' with your preferred text editor
+# Setting default editor
+export VISUAL='nvim'
+export EDITOR='nvim'
 
-# Ranger CD on exit
+# yazi CD on exit
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
 	yazi "$@" --cwd-file="$tmp"
@@ -124,5 +124,4 @@ function y() {
 	rm -f -- "$tmp"
 }
 eval "$(zoxide init zsh)"
-alias config='/usr/bin/git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
