@@ -19,9 +19,6 @@ vim.g.maplocalleader = "\\"
 require("lazy").setup({
   spec = {
     {
-      "RRethy/base16-nvim"
-    },
-    {
       "ntpeters/vim-better-whitespace"
     },
     {
@@ -205,7 +202,7 @@ require("lazy").setup({
         vim.g.gruvbox_material_enable_italic = true
         vim.g.gruvbox_material_enable_bold = true
         vim.g.gruvbox_material_enable_bold = true
-        vim.cmd.colorscheme('base16-black-metal-gorgoroth')
+        vim.cmd.colorscheme('gruvbox-material')
       end
     },
     {'nvim-telescope/telescope.nvim', tag = '0.1.8'},
