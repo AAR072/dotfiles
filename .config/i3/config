@@ -1,7 +1,6 @@
 for_window [class="^.*"] border pixel 0
 
 exec --no-startup-id picom --experimental-backends
-exec --no-startup-id feh --bg-scale Desktop/wallpaper.jpg
 exec --no-startup-id polybar --config=~/.config/polybar/config.ini beldot
 gaps inner 5
 gaps outer 10
