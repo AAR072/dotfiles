@@ -6,16 +6,16 @@ local lualine = require('lualine')
 -- Color table for highlights based on gruvbox-material
 -- Replace color values with gruvbox-material colors
 local colors = {
-  bg       = '#000000',    -- Base00
-  fg       = '#c1c1c1',    -- Base05
-  yellow   = '#8c7f70',    -- Base0A
-  aqua     = '#9b8d7f',    -- Base0B
-  darkblue = '#888888',    -- Base0D
-  green    = '#aaaaaa',    -- Base0C
-  orange   = '#aaaaaa',    -- Base09
-  purple   = '#999999',    -- Base0E
-  blue     = '#999999',    -- Base06 (fallback)
-  red      = '#5f8787',    -- Base08
+  bg       = '#282828',    -- Dark background (Base00)
+  fg       = '#d4be98',    -- Foreground (Base05)
+  yellow   = '#d8a657',    -- Yellow (Base0A)
+  aqua     = '#a9b665',    -- Aqua (Base0B)
+  darkblue = '#7daea3',    -- Dark Blue (Base0D)
+  green    = '#a9b665',    -- Green (Base0C)
+  orange   = '#e78a4e',    -- Orange (Base09)
+  purple   = '#d3869b',    -- Purple (Base0E)
+  blue     = '#7daea3',    -- Blue (Base06)
+  red      = '#ea6962',    -- Red (Base08)
 }
 
 local conditions = {
