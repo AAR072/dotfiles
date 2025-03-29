@@ -5,4 +5,6 @@
 4. run `stow .`
 ## ZSH PACKAGES TO INSTALL:
 `zsh-syntax-highlighting`
-
+## Wallpaper chaning
+1. Install [https://github.com/varietywalls/variety]
+2. Configure it
