@@ -37,7 +37,15 @@ require("lazy").setup({
         'stevearc/dressing.nvim', -- optional for vim.ui.select
       },
       config = function()
-        require("flutter-tools").setup()
+        require("flutter-tools").setup {
+          lsp = {
+            color = {
+              enabled = true,
+              background = false
+            }
+          }
+
+        }
       end
     },
     {
