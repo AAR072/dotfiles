@@ -4,17 +4,6 @@ require("config.remap")
 -- Hide the banner in the explorer
 vim.g.netrw_banner = 0
 
-vim.keymap.set('n', '<C-s>', '<CMD>w<CR>', { noremap = true, silent = true, desc = 'Save file' })
-vim.keymap.set('i', '<C-s>', '<Esc><CMD>w<CR>a', { noremap = true, silent = true, desc = 'Save file (insert mode)' })
-
--- Make line breaks respect word wrap
-vim.keymap.set('n', 'j', 'gj', { noremap = true, silent = true, desc = 'Down (respect line wrap)' })
-vim.keymap.set('n', 'k', 'gk', { noremap = true, silent = true, desc = 'Up (respect line wrap)' })
-vim.keymap.set('v', 'j', 'gj', { noremap = true, silent = true, desc = 'Down (visual, respect wrap)' })
-vim.keymap.set('v', 'k', 'gk', { noremap = true, silent = true, desc = 'Up (visual, respect wrap)' })
-
--- Oil navigation keybind
-vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
 
 -- Make all yanks and pastes go into global clipboard
 vim.opt.clipboard = "unnamedplus"
