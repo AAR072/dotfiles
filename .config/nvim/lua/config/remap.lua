@@ -1,5 +1,5 @@
 -- <leader>pv -> Open built in file explorer
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>pv", "<CMD>Oil<CR>", opts)
 -- <leader>lt -> Run :Leet test
 vim.keymap.set("n", "<leader>lt", function() vim.cmd("Leet test") end, opts)
 

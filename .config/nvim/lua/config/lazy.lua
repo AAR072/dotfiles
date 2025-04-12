@@ -19,15 +19,63 @@ vim.g.maplocalleader = "\\"
 require("lazy").setup({
   spec = {
     {
+      'stevearc/oil.nvim',
+      ---@module 'oil'
+      ---@type oil.SetupOpts
+      opts = {},
+      -- Optional dependencies
+      dependencies = { { "echasnovski/mini.icons", opts = {} } },
+      -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
+      -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+      lazy = false,
+      config = function ()
+        require("oil").setup{
+          default_file_explorer = true,
+          delete_to_trash = true,
+          skip_confirm_for_simple_edits = true,
+          view_options = {
+            show_hidden = true,
+            natural_order = true,
+            is_always_hidden = function(name, _)
+              return name == '..' or name == '.git'
+            end,
+          },
+          win_options = {
+            wrap = true
+          }
+        }
+      end
+    },
+    {
       "ntpeters/vim-better-whitespace"
     },
     {
       "folke/snacks.nvim",
+      priority = 1000,
+      lazy = false,
       ---@type snacks.Config
       opts = {
+        ---@class snacks.indent.Config
         indent = {
+          enabled = true
+        },
+        ---@class snacks.dim.Config
+        dim = {
+          enabled = true,
+          scope = {
+            min_size = 10,
+            max_size = 30,
+          }
         }
-      }
+      },
+      init = function()
+        vim.api.nvim_create_autocmd("User", {
+          pattern = "VeryLazy",
+          callback = function()
+            Snacks.dim.enable(opts)
+          end,
+        })
+      end
     },
     {
       'nvim-flutter/flutter-tools.nvim',
@@ -233,12 +281,12 @@ require("lazy").setup({
       cmd = "Trouble",
       keys = {
         {
-          "<leader>xx",
+          "<leader>xX",
           "<cmd>Trouble diagnostics toggle<cr>",
           desc = "Diagnostics (Trouble)",
         },
         {
-          "<leader>xX",
+          "<leader>xx",
           "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
           desc = "Buffer Diagnostics (Trouble)",
         },
@@ -269,12 +317,8 @@ require("lazy").setup({
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "gruvbox-material" } },
   -- Do not automatically check for plugin updates
-  checker = { enabled = false },
+  checker = { enabled = true},
 })
-
--- Centre Setup
-
-
 
 -- LSP Setup
 local lsp_zero = require('lsp-zero')

@@ -103,7 +103,9 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# Inertial Scrolling
+export MOZ_ENABLE_WAYLAND=1
 export PATH="/home/aa/.mozbuild/git-cinnabar:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
@@ -123,5 +125,6 @@ function y() {
 	fi
 	rm -f -- "$tmp"
 }
+alias ls="lsd"
 eval "$(zoxide init zsh)"
-source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
