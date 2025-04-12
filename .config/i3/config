@@ -1,7 +1,9 @@
 for_window [class="^.*"] border pixel 0
 
-exec --no-startup-id picom --experimental-backends
+exec --no-startup-id picom
+exec --no-startup-id variety
 exec --no-startup-id polybar --config=~/.config/polybar/config.ini beldot
+exec --no-startup-id xinput set-prop $devid 10 304 1
 gaps inner 5
 gaps outer 10
 
