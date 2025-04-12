@@ -59,20 +59,11 @@ require("lazy").setup({
         indent = {
           enabled = true
         },
-        ---@class snacks.dim.Config
-        dim = {
-          enabled = true,
-          scope = {
-            min_size = 10,
-            max_size = 30,
-          }
-        }
       },
       init = function()
         vim.api.nvim_create_autocmd("User", {
           pattern = "VeryLazy",
           callback = function()
-            Snacks.dim.enable(opts)
           end,
         })
       end
@@ -92,7 +83,6 @@ require("lazy").setup({
               background = false
             }
           }
-
         }
       end
     },
