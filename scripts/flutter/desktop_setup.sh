@@ -13,6 +13,3 @@ adb connect "$PHONE_IP:5555"
 
 echo "[REMOTE] Verifying device connection..."
 adb devices
-
-echo "[REMOTE] Starting flutter run..."
-flutter run

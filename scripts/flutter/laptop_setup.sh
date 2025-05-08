@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+REMOTE_USER="aa"
+REMOTE_HOST="laptop"
+REMOTE_PATH="/home/aa/development"
+LOCAL_MOUNT="$HOME/remote-dev"
+
 echo "[LOCAL] Killing ADB server and resetting..."
 adb kill-server
 adb start-server
@@ -23,11 +28,10 @@ echo "[LOCAL] Found phone IP: $PHONE_IP"
 echo "==> Unplug the phone now."
 read -p "Press ENTER when unplugged..."
 
-echo "[LOCAL] Test connecting from remote via: adb connect $PHONE_IP:5555"
-echo "You can now SSH to the remote and run the remote script."
+# SSHFS mount
+echo "[LOCAL] Mounting remote dev dir via sshfs..."
+mkdir -p "$LOCAL_MOUNT"
+sshfs "${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}" "$LOCAL_MOUNT"
 
-echo
-echo "[OPTIONAL] Copying remote_run.sh to remote machine..."
-scp ./remote_run.sh youruser@remote-host:~/flutter-phone-dev/remote_run.sh
-
-echo "[DONE] Now SSH in and run: bash ~/flutter-phone-dev/remote_run.sh $PHONE_IP"
+echo "[LOCAL] Mount complete. Now connecting to remote via SSH..."
+ssh "${REMOTE_USER}@${REMOTE_HOST}"
