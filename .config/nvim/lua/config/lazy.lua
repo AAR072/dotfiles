@@ -19,6 +19,13 @@ vim.g.maplocalleader = "\\"
 require("lazy").setup({
   spec = {
     {
+      "max397574/better-escape.nvim",
+      config = function()
+        require("better_escape").setup()
+    }
+      end,
+    },
+    {
       'stevearc/oil.nvim',
       ---@module 'oil'
       ---@type oil.SetupOpts
