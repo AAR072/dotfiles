@@ -29,10 +29,7 @@ require("lazy").setup({
       ---@module 'oil'
       ---@type oil.SetupOpts
       opts = {},
-      -- Optional dependencies
       dependencies = { { "echasnovski/mini.icons", opts = {} } },
-      -- dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
-      -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
       lazy = false,
       config = function ()
         require("oil").setup{
@@ -150,7 +147,13 @@ require("lazy").setup({
         },
 
         -- (Default) Only show the documentation popup when manually triggered
-        completion = { documentation = { auto_show = false } },
+        completion = {
+          documentation = { auto_show = true
+          },
+          ghost_text = {
+            enabled = true
+          }
+        },
 
         -- Default list of enabled providers defined so that you can extend it
         -- elsewhere in your config, without redefining it, due to `opts_extend`
@@ -265,7 +268,7 @@ require("lazy").setup({
         local configs = require("nvim-treesitter.configs")
 
         configs.setup({
-          ensure_installed = { "typescript", "c", "lua", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "svelte", "dart"},
+          ensure_installed = { "typescript", "c", "lua", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "svelte", "dart", "python"},
           highlight = { enable = true },
           indent = { enable = true },
         })
@@ -323,7 +326,6 @@ local lsp_zero = require('lsp-zero')
 -- if there is a language server active in the file
 local lsp_attach = function(client, bufnr)
   local opts = {buffer = bufnr}
-
   vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
   vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
   vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
@@ -346,6 +348,8 @@ require('lspconfig').lua_ls.setup({
 require('lspconfig').clangd.setup({
 })
 require('lspconfig').svelte.setup({
+})
+require('lspconfig').pyright.setup({
 })
 require("typescript-tools").setup({
 })
