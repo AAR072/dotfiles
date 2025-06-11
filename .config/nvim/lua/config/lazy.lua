@@ -356,13 +356,4 @@ local lsp_attach = function(client, bufnr)
   vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
 end
 
--- require('lspconfig').lua_ls.setup({
--- })
--- require('lspconfig').clangd.setup({
--- })
--- require('lspconfig').svelte.setup({
--- })
--- require('lspconfig').pyright.setup({
--- })
--- require("typescript-tools").setup({
--- })
+vim.api.nvim_set_hl(0, "BlinkCmpGhostText", { fg = "#6C6C6C" })
