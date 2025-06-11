@@ -6,16 +6,16 @@ local lualine = require('lualine')
 -- Color table for highlights based on gruvbox-material
 -- Replace color values with gruvbox-material colors
 local colors = {
-  bg       = '#282828',    -- Dark background (Base00)
-  fg       = '#d4be98',    -- Foreground (Base05)
-  yellow   = '#d8a657',    -- Yellow (Base0A)
-  aqua     = '#a9b665',    -- Aqua (Base0B)
-  darkblue = '#7daea3',    -- Dark Blue (Base0D)
-  green    = '#a9b665',    -- Green (Base0C)
-  orange   = '#e78a4e',    -- Orange (Base09)
-  purple   = '#d3869b',    -- Purple (Base0E)
-  blue     = '#7daea3',    -- Blue (Base06)
-  red      = '#ea6962',    -- Red (Base08)
+  bg       = '#000000',    -- Dark background
+  fg       = '#ffffff',    -- Foreground (white text)
+  yellow   = '#f5a623',    -- Vercel-style warm accent (used sparingly)
+  aqua     = '#50e3c2',    -- Soft teal accent, similar to success color
+  darkblue = '#4a90e2',    -- Brighter blue (used in links/buttons)
+  green    = '#7ed321',    -- Success green
+  orange   = '#f5a623',    -- Same warm orange as yellow
+  purple   = '#9013fe',    -- Purple accent for focus elements
+  blue     = '#4a90e2',    -- Standard Vercel blue
+  red      = '#d0021b',    -- Error red
 }
 
 local conditions = {

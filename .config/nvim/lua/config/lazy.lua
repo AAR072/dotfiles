@@ -19,10 +19,30 @@ vim.g.maplocalleader = "\\"
 require("lazy").setup({
   spec = {
     {
-      "max397574/better-escape.nvim",
+      "williamboman/mason.nvim",
+      build = ":MasonUpdate",
+      config = true,
+    },
+    {
+      "williamboman/mason-lspconfig.nvim",
+      dependencies = { "williamboman/mason.nvim" },
       config = function()
-        require("better_escape").setup()
-      end,
+        local lsp_zero = require('lsp-zero')
+        lsp_zero.extend_lspconfig({
+          sign_text = true,
+          lsp_attach = lsp_attach,
+          capabilities = require('blink.cmp').get_lsp_capabilities(),
+        })
+        require("mason-lspconfig").setup({
+          ensure_installed = { "lua_ls", "clangd", "svelte", "tsserver", "pyright" },
+          handlers = {
+            lsp_zero.default_setup,
+            tsserver = function()
+              require("typescript-tools").setup({})
+            end,
+          },
+        })
+      end
     },
     {
       'stevearc/oil.nvim',
@@ -248,7 +268,7 @@ require("lazy").setup({
     },
     {'nvim-telescope/telescope.nvim', tag = '0.1.8'},
     {
-      'sainnhe/gruvbox-material',
+      'ceigh/vercel-theme.nvim',
       lazy = false,
       priority = 1000,
       config = function()
@@ -257,7 +277,7 @@ require("lazy").setup({
         vim.g.gruvbox_material_enable_italic = true
         vim.g.gruvbox_material_enable_bold = true
         vim.g.gruvbox_material_enable_bold = true
-        vim.cmd.colorscheme('gruvbox-material')
+        vim.cmd.colorscheme('vercel')
       end
     },
     {'nvim-telescope/telescope.nvim', tag = '0.1.8'},
@@ -314,14 +334,12 @@ require("lazy").setup({
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { "gruvbox-material" } },
+  install = { colorscheme = { "vercel" } },
   -- Do not automatically check for plugin updates
   checker = { enabled = true},
 })
 
 -- LSP Setup
-local lsp_zero = require('lsp-zero')
-
 -- lsp_attach is where you enable features that only work
 -- if there is a language server active in the file
 local lsp_attach = function(client, bufnr)
@@ -338,18 +356,13 @@ local lsp_attach = function(client, bufnr)
   vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
 end
 
-lsp_zero.extend_lspconfig({
-  sign_text = true,
-  lsp_attach = lsp_attach,
-  capabilities = require('blink.cmp').get_lsp_capabilities(),
-})
-require('lspconfig').lua_ls.setup({
-})
-require('lspconfig').clangd.setup({
-})
-require('lspconfig').svelte.setup({
-})
-require('lspconfig').pyright.setup({
-})
-require("typescript-tools").setup({
-})
+-- require('lspconfig').lua_ls.setup({
+-- })
+-- require('lspconfig').clangd.setup({
+-- })
+-- require('lspconfig').svelte.setup({
+-- })
+-- require('lspconfig').pyright.setup({
+-- })
+-- require("typescript-tools").setup({
+-- })
