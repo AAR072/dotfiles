@@ -34,7 +34,7 @@ require("lazy").setup({
           capabilities = require('blink.cmp').get_lsp_capabilities(),
         })
         require("mason-lspconfig").setup({
-          ensure_installed = { "lua_ls", "clangd", "svelte", "tsserver", "pyright" },
+          ensure_installed = { "lua_ls", "clangd", "svelte", "ts_ls", "pyright" },
           handlers = {
             lsp_zero.default_setup,
             tsserver = function()
