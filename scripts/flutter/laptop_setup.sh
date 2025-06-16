@@ -2,7 +2,7 @@
 set -e
 
 REMOTE_USER="aa"
-REMOTE_HOST="laptop"
+REMOTE_HOST="desktop"
 REMOTE_PATH="/home/aa/development"
 LOCAL_MOUNT="$HOME/remote-dev"
 

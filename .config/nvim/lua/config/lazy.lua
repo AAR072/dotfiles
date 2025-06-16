@@ -16,8 +16,54 @@ end
 vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
+local lsp_attach = function(client, bufnr)
+  local opts = { buffer = bufnr, noremap = true, silent = true }
+  vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+  vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+  vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+  vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+  vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, noremap = true, silent = true })
+  vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+  vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+  vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+  vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+end
+
 require("lazy").setup({
   spec = {
+    {
+      "max397574/better-escape.nvim",
+      config = function()
+        require("better_escape").setup()
+      end,
+    },
+    {
+      "ray-x/go.nvim",
+      dependencies = {  -- optional packages
+        "ray-x/guihua.lua",
+        "neovim/nvim-lspconfig",
+        "nvim-treesitter/nvim-treesitter",
+      },
+      opts = {
+        -- lsp_keymaps = false,
+        -- other options
+      },
+      config = function(lp, opts)
+        require("go").setup(opts)
+        local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          pattern = "*.go",
+          callback = function()
+            require('go.format').goimports()
+          end,
+          group = format_sync_grp,
+        })
+      end,
+      event = {"CmdlineEnter"},
+      ft = {"go", 'gomod'},
+      build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+    },
     {
       "williamboman/mason.nvim",
       build = ":MasonUpdate",
@@ -34,11 +80,27 @@ require("lazy").setup({
           capabilities = require('blink.cmp').get_lsp_capabilities(),
         })
         require("mason-lspconfig").setup({
-          ensure_installed = { "lua_ls", "clangd", "svelte", "ts_ls", "pyright" },
+          ensure_installed = { "lua_ls", "clangd", "svelte", "ts_ls", "pyright"},
           handlers = {
             lsp_zero.default_setup,
             tsserver = function()
               require("typescript-tools").setup({})
+            end,
+            gopls = function()
+              require("lspconfig").gopls.setup({
+                on_attach = lsp_attach,
+                capabilities = require("blink.cmp").get_lsp_capabilities(),
+                settings = {
+                  gopls = {
+                    gofumpt = true,
+                    staticcheck = true,
+                    analyses = {
+                      unusedparams = true,
+                      shadow = true,
+                    },
+                  },
+                },
+              })
             end,
           },
         })
@@ -128,7 +190,8 @@ require("lazy").setup({
     {
       'ggandor/leap.nvim',
       config = function ()
-        require('leap').create_default_mappings()
+        vim.keymap.set('n',        's', '<Plug>(leap-anywhere)')
+        vim.keymap.set({'x', 'o'}, 's', '<Plug>(leap)')
       end
     },
     {
@@ -146,27 +209,12 @@ require("lazy").setup({
       ---@module 'blink.cmp'
       ---@type blink.cmp.Config
       opts = {
-        -- 'default' (recommended) for mappings similar to built-in completions (C-y to accept)
-        -- 'super-tab' for mappings similar to vscode (tab to accept)
-        -- 'enter' for enter to accept
-        -- 'none' for no mappings
-        --
-        -- All presets have the following mappings:
-        -- C-space: Open menu or open docs if already open
-        -- C-n/C-p or Up/Down: Select next/previous item
-        -- C-e: Hide menu
-        -- C-k: Toggle signature help (if signature.enabled = true)
-        --
-        -- See :h blink-cmp-config-keymap for defining your own keymap
         keymap = { preset = 'enter' },
 
         appearance = {
-          -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-          -- Adjusts spacing to ensure icons are aligned
           nerd_font_variant = 'mono'
         },
 
-        -- (Default) Only show the documentation popup when manually triggered
         completion = {
           documentation = { auto_show = true
           },
@@ -175,17 +223,10 @@ require("lazy").setup({
           }
         },
 
-        -- Default list of enabled providers defined so that you can extend it
-        -- elsewhere in your config, without redefining it, due to `opts_extend`
         sources = {
           default = { 'lsp', 'path', 'snippets'},
         },
 
-        -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
-        -- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
-        -- when the Rust fuzzy matcher is not available, by using `implementation = "prefer_rust"`
-        --
-        -- See the fuzzy documentation for more information
         fuzzy = { implementation = "prefer_rust_with_warning" }
       },
       opts_extend = { "sources.default" }
@@ -268,15 +309,15 @@ require("lazy").setup({
     },
     {'nvim-telescope/telescope.nvim', tag = '0.1.8'},
     {
-      'ceigh/vercel-theme.nvim',
+      'AAR072/vercel-theme.nvim',
       lazy = false,
       priority = 1000,
       config = function()
         -- Optionally configure and load the colorscheme
         -- directly inside the plugin declaration.
-        vim.g.gruvbox_material_enable_italic = true
-        vim.g.gruvbox_material_enable_bold = true
-        vim.g.gruvbox_material_enable_bold = true
+        -- vim.g.gruvbox_material_enable_italic = true
+        -- vim.g.gruvbox_material_enable_bold = true
+        -- vim.g.gruvbox_material_enable_bold = true
         vim.cmd.colorscheme('vercel')
       end
     },
@@ -284,15 +325,42 @@ require("lazy").setup({
     {
       "nvim-treesitter/nvim-treesitter",
       build = ":TSUpdate",
-      config = function ()
+      dependencies = {
+        "nvim-treesitter/nvim-treesitter-textobjects", -- Add textobjects as a dependency
+      },
+      config = function()
         local configs = require("nvim-treesitter.configs")
-
         configs.setup({
-          ensure_installed = { "typescript", "c", "lua", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "svelte", "dart", "python"},
+          ensure_installed = { "typescript", "c", "lua", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "svelte", "dart", "python", "go" },
           highlight = { enable = true },
           indent = { enable = true },
+          -- Add textobjects configuration
+          textobjects = {
+            select = {
+              enable = true,
+              lookahead = true,
+              keymaps = {
+                ["af"] = "@function.outer", -- Around function (includes `def`/`function` and `end`)
+                ["if"] = "@function.inner", -- Inside function (body only)
+                ["ac"] = "@class.outer",    -- Around class
+                ["ic"] = "@class.inner",    -- Inside class
+              },
+            },
+            move = {
+              enable = true,
+              set_jumps = true,
+              goto_next_start = {
+                ["]m"] = "@function.outer", -- Jump to next function start
+                ["]]"] = "@class.outer",    -- Jump to next class start
+              },
+              goto_previous_start = {
+                ["[m"] = "@function.outer", -- Jump to previous function start
+                ["[["] = "@class.outer",    -- Jump to previous class start
+              },
+            },
+          },
         })
-      end
+      end,
     },
     {
       "folke/trouble.nvim",
@@ -342,18 +410,5 @@ require("lazy").setup({
 -- LSP Setup
 -- lsp_attach is where you enable features that only work
 -- if there is a language server active in the file
-local lsp_attach = function(client, bufnr)
-  local opts = {buffer = bufnr}
-  vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-  vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-  vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-  vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-  vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-  vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-  vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-  vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-  vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-  vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-end
 
 vim.api.nvim_set_hl(0, "BlinkCmpGhostText", { fg = "#6C6C6C" })
