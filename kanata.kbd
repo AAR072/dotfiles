@@ -1,0 +1,49 @@
+;; Global configuration settings
+(defcfg
+  process-unmapped-keys yes  ;; Allow unmapped keys to pass through
+)
+
+;; Define aliases for mouse movement for cleaner code
+(defalias
+  ;; Mouse movement with sensible defaults (speed and pixels per move)
+  ms↑ (movemouse-up 4 3)
+  ms↓ (movemouse-down 4 3)
+  ms← (movemouse-left 4 3)
+  ms→ (movemouse-right 4 3)
+
+  ;; Mouse clicks
+  mlft mlft
+  mmid mmid
+  mrgt mrgt
+)
+
+;; Define your default source layer (your physical keyboard layout)
+;; This is a standard 60% layout example. Adjust if your keyboard has more/fewer keys.
+;; You need to ensure the number of keys here matches the number in every `deflayer`.
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet menu rctl
+)
+
+;; Define the base layer (normal keyboard functionality)
+(deflayer base
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  (tap-hold 200 200 (layer-switch mouse) caps)  ;; Caps Lock to toggle mouse layer
+       a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt rmet menu rctl
+)
+
+;; Define the mouse control layer
+(deflayer mouse
+  _    _    _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    @ms↑ _    _    _    _    _    _    _    _    _    _    _  ;; W for Up
+  (layer-switch base) ;; Caps Lock (in mouse layer) to switch back to base
+       @ms← @ms↓ @ms→ _    _    mlft mmid mrgt _    _    _    _     ;; A,S,D for Left, Down, Right; J,K,L for clicks
+  _    _    _    _    _    _    _    _    _    _    _    _
+  _    _    _                  _              _    _    _    _
+)
