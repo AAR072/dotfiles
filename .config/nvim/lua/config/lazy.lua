@@ -33,36 +33,20 @@ end
 require("lazy").setup({
   spec = {
     {
+      "OXY2DEV/markview.nvim",
+      config = function ()
+        require("markview").setup({
+          experimental = {
+            check_rtp_message = false,
+          }})
+      end,
+      lazy = false,
+    },
+    {
       "max397574/better-escape.nvim",
       config = function()
         require("better_escape").setup()
       end,
-    },
-    {
-      "ray-x/go.nvim",
-      dependencies = {  -- optional packages
-        "ray-x/guihua.lua",
-        "neovim/nvim-lspconfig",
-        "nvim-treesitter/nvim-treesitter",
-      },
-      opts = {
-        -- lsp_keymaps = false,
-        -- other options
-      },
-      config = function(lp, opts)
-        require("go").setup(opts)
-        local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
-        vim.api.nvim_create_autocmd("BufWritePre", {
-          pattern = "*.go",
-          callback = function()
-            require('go.format').goimports()
-          end,
-          group = format_sync_grp,
-        })
-      end,
-      event = {"CmdlineEnter"},
-      ft = {"go", 'gomod'},
-      build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
     },
     {
       "williamboman/mason.nvim",
@@ -80,7 +64,7 @@ require("lazy").setup({
           capabilities = require('blink.cmp').get_lsp_capabilities(),
         })
         require("mason-lspconfig").setup({
-          ensure_installed = { "lua_ls", "clangd", "svelte", "ts_ls", "pyright"},
+          ensure_installed = { "lua_ls", "clangd", "svelte", "ts_ls", "pyright", "gopls", "intelephense" },
           handlers = {
             lsp_zero.default_setup,
             tsserver = function()
@@ -102,6 +86,65 @@ require("lazy").setup({
                 },
               })
             end,
+            intelephense = function()
+              require("lspconfig").intelephense.setup({
+                on_attach = lsp_attach,
+                capabilities = require("blink.cmp").get_lsp_capabilities(),
+                settings = {
+                  intelephense = {
+                    stubs = {
+                      "bcmath",
+                      "bz2",
+                      "calendar",
+                      "Core",
+                      "curl",
+                      "date",
+                      "dom",
+                      "fileinfo",
+                      "filter",
+                      "ftp",
+                      "gd",
+                      "hash",
+                      "iconv",
+                      "json",
+                      "libxml",
+                      "mbstring",
+                      "openssl",
+                      "pcre",
+                      "PDO",
+                      "readline",
+                      "Reflection",
+                      "session",
+                      "SimpleXML",
+                      "SPL",
+                      "standard",
+                      "tokenizer",
+                      "xml",
+                      "xmlreader",
+                      "xmlwriter",
+                      "zip",
+                      "zlib",
+                      "wordpress",
+                      "woocommerce",
+                      "acf-pro",
+                      "wordpress-globals",
+                      "wp-cli",
+                      "genesis",
+                      "polylang",
+                    },
+environment = {
+  includePaths = {
+    "/Users/aa/.composer/vendor/php-stubs/wordpress-globals",
+  },
+},
+                    files = {
+                      maxSize = 5000000,
+                    },
+                  },
+                },
+              })
+            end,
+
           },
         })
       end
@@ -260,14 +303,6 @@ require("lazy").setup({
         require('plugins.lualine')  -- Load your external lualine configuration
       end,
     },
-    {
-      "OXY2DEV/markview.nvim",
-      lazy = false,      -- Recommended
-      dependencies = {
-        "nvim-treesitter/nvim-treesitter",
-        "nvim-tree/nvim-web-devicons"
-      }
-    },
     {"tpope/vim-commentary"},
     {
       "ThePrimeagen/harpoon",
@@ -323,6 +358,32 @@ require("lazy").setup({
     },
     {'nvim-telescope/telescope.nvim', tag = '0.1.8'},
     {
+      "ray-x/go.nvim",
+      dependencies = {  -- optional packages
+        "ray-x/guihua.lua",
+        "neovim/nvim-lspconfig",
+        "nvim-treesitter/nvim-treesitter",
+      },
+      opts = {
+        -- lsp_keymaps = false,
+        -- other options
+      },
+      config = function(lp, opts)
+        require("go").setup(opts)
+        local format_sync_grp = vim.api.nvim_create_augroup("GoFormat", {})
+        vim.api.nvim_create_autocmd("BufWritePre", {
+          pattern = "*.go",
+          callback = function()
+            require('go.format').goimports()
+          end,
+          group = format_sync_grp,
+        })
+      end,
+      event = {"CmdlineEnter"},
+      ft = {"go", 'gomod'},
+      build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+    },
+    {
       "nvim-treesitter/nvim-treesitter",
       build = ":TSUpdate",
       dependencies = {
@@ -331,7 +392,7 @@ require("lazy").setup({
       config = function()
         local configs = require("nvim-treesitter.configs")
         configs.setup({
-          ensure_installed = { "typescript", "c", "lua", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "svelte", "dart", "python", "go" },
+          ensure_installed = { "typescript", "c", "lua", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "svelte", "dart", "python", "go", "php" },
           highlight = { enable = true },
           indent = { enable = true },
           -- Add textobjects configuration

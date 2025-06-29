@@ -1,6 +1,11 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
+
+# Prioritize Homebrew binaries over system ones
+export PATH="/opt/homebrew/bin:$PATH"
+
+
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -41,7 +46,7 @@ ZSH_THEME="refined"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+ENABLE_CORRECTION="false"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # You can also set it to another string to have that shown instead of the default red dots.
@@ -107,7 +112,6 @@ source $ZSH/oh-my-zsh.sh
 
 # eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 # Inertial Scrolling
-export MOZ_ENABLE_WAYLAND=1
 export PATH="/home/aa/.mozbuild/git-cinnabar:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
@@ -129,4 +133,4 @@ function y() {
 }
 alias ls="lsd"
 eval "$(zoxide init zsh)"
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
