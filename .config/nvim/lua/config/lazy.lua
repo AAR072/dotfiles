@@ -16,30 +16,30 @@ end
 vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
-local lsp_attach = function(client, bufnr)
-  local opts = { buffer = bufnr, noremap = true, silent = true }
-  vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-  vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-  vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-  vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-  vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, noremap = true, silent = true })
-  vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-  vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-  vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-  vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-end
+-- local lsp_attach = function(client, bufnr)
+--   local opts = { buffer = bufnr, noremap = true, silent = true }
+--   vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+--   vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+--   vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+--   vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+--   vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+--   vim.keymap.set('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, noremap = true, silent = true })
+--   vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+--   vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+--   vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+--   vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+-- end
 
 require("lazy").setup({
   spec = {
     {
       "OXY2DEV/markview.nvim",
-      config = function ()
-        require("markview").setup({
-          experimental = {
-            check_rtp_message = false,
-          }})
-      end,
+      -- config = function ()
+      --   require("markview").setup({
+      --     experimental = {
+      --       check_rtp_message = false,
+      --     }})
+      -- end,
       lazy = false,
     },
     {
@@ -53,101 +53,26 @@ require("lazy").setup({
       build = ":MasonUpdate",
       config = true,
     },
-    {
-      "williamboman/mason-lspconfig.nvim",
-      dependencies = { "williamboman/mason.nvim" },
-      config = function()
-        local lsp_zero = require('lsp-zero')
-        lsp_zero.extend_lspconfig({
-          sign_text = true,
-          lsp_attach = lsp_attach,
-          capabilities = require('blink.cmp').get_lsp_capabilities(),
-        })
-        require("mason-lspconfig").setup({
-          ensure_installed = { "lua_ls", "clangd", "svelte", "ts_ls", "pyright", "gopls", "intelephense" },
-          handlers = {
-            lsp_zero.default_setup,
-            tsserver = function()
-              require("typescript-tools").setup({})
-            end,
-            gopls = function()
-              require("lspconfig").gopls.setup({
-                on_attach = lsp_attach,
-                capabilities = require("blink.cmp").get_lsp_capabilities(),
-                settings = {
-                  gopls = {
-                    gofumpt = true,
-                    staticcheck = true,
-                    analyses = {
-                      unusedparams = true,
-                      shadow = true,
-                    },
-                  },
-                },
-              })
-            end,
-            intelephense = function()
-              require("lspconfig").intelephense.setup({
-                on_attach = lsp_attach,
-                capabilities = require("blink.cmp").get_lsp_capabilities(),
-                settings = {
-                  intelephense = {
-                    stubs = {
-                      "bcmath",
-                      "bz2",
-                      "calendar",
-                      "Core",
-                      "curl",
-                      "date",
-                      "dom",
-                      "fileinfo",
-                      "filter",
-                      "ftp",
-                      "gd",
-                      "hash",
-                      "iconv",
-                      "json",
-                      "libxml",
-                      "mbstring",
-                      "openssl",
-                      "pcre",
-                      "PDO",
-                      "readline",
-                      "Reflection",
-                      "session",
-                      "SimpleXML",
-                      "SPL",
-                      "standard",
-                      "tokenizer",
-                      "xml",
-                      "xmlreader",
-                      "xmlwriter",
-                      "zip",
-                      "zlib",
-                      "wordpress",
-                      "woocommerce",
-                      "acf-pro",
-                      "wordpress-globals",
-                      "wp-cli",
-                      "genesis",
-                      "polylang",
-                    },
-environment = {
-  includePaths = {
-    "/Users/aa/.composer/vendor/php-stubs/wordpress-globals",
-  },
-},
-                    files = {
-                      maxSize = 5000000,
-                    },
-                  },
-                },
-              })
-            end,
+{
+  "williamboman/mason-lspconfig.nvim",
+  dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
+  config = function()
+    require("mason-lspconfig").setup({
+      ensure_installed = { "lua_ls", "clangd", "svelte", "ts_ls", "pyright", "gopls", "intelephense" },
+    })
 
-          },
-        })
-      end
+    -- Load LSP configurations from separate files
+    -- require('plugins.intelephense').setup()
+
+    -- Configure other LSP servers as needed
+    require('lspconfig').lua_ls.setup({})
+    require('lspconfig').clangd.setup({})
+    -- etc...
+  end,
+},
+    {
+      'VonHeikemen/lsp-zero.nvim',
+      branch = 'v4.x',
     },
     {
       'stevearc/oil.nvim',
@@ -309,8 +234,7 @@ environment = {
       branch = "harpoon2",
       dependencies = { "nvim-lua/plenary.nvim" }
     },
-    {'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
-    {'neovim/nvim-lspconfig'},
+    { "neovim/nvim-lspconfig" },
     {"pmizio/typescript-tools.nvim"},
     {
       "jiaoshijie/undotree",
@@ -472,4 +396,3 @@ environment = {
 -- lsp_attach is where you enable features that only work
 -- if there is a language server active in the file
 
-vim.api.nvim_set_hl(0, "BlinkCmpGhostText", { fg = "#6C6C6C" })

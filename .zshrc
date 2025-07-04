@@ -134,3 +134,8 @@ function y() {
 alias ls="lsd"
 eval "$(zoxide init zsh)"
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/aa/.lmstudio/bin"
+# End of LM Studio CLI section
+
