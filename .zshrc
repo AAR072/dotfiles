@@ -5,7 +5,6 @@
 # Prioritize Homebrew binaries over system ones
 export PATH="/opt/homebrew/bin:$PATH"
 
-
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -138,4 +137,18 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/aa/.lmstudio/bin"
 # End of LM Studio CLI section
+
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /Users/aa/.dart-cli-completion/zsh-config.zsh ]] && . /Users/aa/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
+# Android studio
+export ANDROID_HOME=/Users/aa/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
 

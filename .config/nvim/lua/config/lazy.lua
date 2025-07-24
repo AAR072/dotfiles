@@ -16,30 +16,22 @@ end
 vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
--- local lsp_attach = function(client, bufnr)
---   local opts = { buffer = bufnr, noremap = true, silent = true }
---   vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
---   vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
---   vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
---   vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
---   vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
---   vim.keymap.set('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, noremap = true, silent = true })
---   vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
---   vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
---   vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
---   vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
--- end
-
 require("lazy").setup({
   spec = {
     {
+      'chomosuke/typst-preview.nvim',
+      lazy = false, -- or ft = 'typst'
+      version = '1.*',
+      opts = {}, -- lazy.nvim will implicitly calls `setup {}`
+    },
+    {
       "OXY2DEV/markview.nvim",
-      -- config = function ()
-      --   require("markview").setup({
-      --     experimental = {
-      --       check_rtp_message = false,
-      --     }})
-      -- end,
+      config = function ()
+        require("markview").setup({
+          experimental = {
+            check_rtp_message = false,
+          }})
+      end,
       lazy = false,
     },
     {
@@ -268,19 +260,20 @@ require("lazy").setup({
     },
     {'nvim-telescope/telescope.nvim', tag = '0.1.8'},
     {
-      'AAR072/vercel-theme.nvim',
+      'sainnhe/gruvbox-material',
       lazy = false,
       priority = 1000,
       config = function()
         -- Optionally configure and load the colorscheme
         -- directly inside the plugin declaration.
-        -- vim.g.gruvbox_material_enable_italic = true
-        -- vim.g.gruvbox_material_enable_bold = true
-        -- vim.g.gruvbox_material_enable_bold = true
-        vim.cmd.colorscheme('vercel')
+        vim.g.gruvbox_material_enable_italic = true
+        vim.g.gruvbox_material_enable_bold = true
+        vim.g.gruvbox_material_enable_bold = true
+        vim.cmd.colorscheme('gruvbox-material')
       end
     },
     {'nvim-telescope/telescope.nvim', tag = '0.1.8'},
+    {        "nvim-treesitter/nvim-treesitter"},
     {
       "ray-x/go.nvim",
       dependencies = {  -- optional packages
@@ -316,7 +309,7 @@ require("lazy").setup({
       config = function()
         local configs = require("nvim-treesitter.configs")
         configs.setup({
-          ensure_installed = { "typescript", "c", "lua", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "svelte", "dart", "python", "go", "php" },
+          ensure_installed = { "typescript", "c", "lua", "vim", "vimdoc", "query", "elixir", "heex", "javascript", "html", "svelte", "dart", "python", "go", "php"  },
           highlight = { enable = true },
           indent = { enable = true },
           -- Add textobjects configuration
