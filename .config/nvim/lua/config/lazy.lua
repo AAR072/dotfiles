@@ -57,8 +57,8 @@ require("lazy").setup({
     -- require('plugins.intelephense').setup()
 
     -- Configure other LSP servers as needed
-    require('lspconfig').lua_ls.setup({})
-    require('lspconfig').clangd.setup({})
+    -- require('lspconfig').lua_ls.setup({})
+    -- require('lspconfig').clangd.setup({})
     -- etc...
   end,
 },
@@ -382,7 +382,7 @@ require("lazy").setup({
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "vercel" } },
   -- Do not automatically check for plugin updates
-  checker = { enabled = true},
+  checker = { enabled = false},
 })
 
 -- LSP Setup
